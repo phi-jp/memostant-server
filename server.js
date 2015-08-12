@@ -5,11 +5,20 @@
 var restify = require('restify');
 var server = restify.createServer();
 
+// setup server
+server.use(restify.bodyParser());
+server.use(restify.queryParser());
+// cross domain 対策
+// http://stackoverflow.com/questions/14338683/how-can-i-support-cors-when-using-restify
+server.use(restify.CORS());
+server.use(restify.fullResponse());
+
 // setup mongoose
 var mongoose = require('mongoose');
 var uristring = process.env.MONGOLAB_URI || 'mongodb://localhost/'; 
 var db = mongoose.connect(uristring);
-// api
+
+// setup api
 var users = require('./api/users.js');
 
 server.get('/', function(req, res) {
