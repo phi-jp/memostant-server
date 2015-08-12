@@ -8,6 +8,8 @@ var BearerStrategy = require('passport-http-bearer').Strategy;
 var jwt = require('jsonwebtoken');
 var config = require('./config');
 
+var mongoose = require('mongoose');
+
 // setup passport
 passport.use(new BearerStrategy({
   },
@@ -28,5 +30,24 @@ passport.use(new BearerStrategy({
 ));
 
 module.exports = {
+  login: function(req, res) {
+    var User = mongoose.model('User');
+    User.findOne({
+      name: req.body.name,
+    }, function(err, user) {
+      if (user.password !== req.body.password) {
+        res.json('error');
+        return ;
+      }
+
+      var token = jwt.sign(user, config.secret, {
+        expiresInMinutes: 1440,
+      });
+
+      res.json({
+        token: token,
+      });
+    });
+  },
   checkBearer: passport.authenticate('bearer', {session:false}),
 };

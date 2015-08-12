@@ -34,4 +34,28 @@ module.exports = {
       });
     });
   },
-}
+  show: function(req, res) {
+    User.findOne({
+      name: req.params.name,
+    }, function(err, user) {
+      res.json({
+        user: user,
+      });
+    });
+  },
+  create: function(req, res) {
+    var user = new User({
+      name: req.params.name,
+      password: req.params.password,
+      admin: true,
+    });
+    user.save(function(err, data) {
+      res.send({
+        user: user,
+      });
+    });
+  },
+  update: function(req, res) {
+    res.send("update");
+  },
+};

@@ -19,15 +19,23 @@ var uristring = process.env.MONGOLAB_URI || 'mongodb://localhost/';
 var db = mongoose.connect(uristring);
 
 // setup api
+var auth = require('./auth.js');
 var users = require('./api/users.js');
+var notes = require('./api/notes.js');
 
 server.get('/', function(req, res) {
   res.json({
     message: 'Hello, world!',
   });
 });
+server.post('/login', auth.login);
 
 server.get('/users', users.index);
+server.get('/users/:name', users.show);
+server.post('/users', users.create);
+
+server.get('/notes', notes.index);
+server.post('/notes', auth.checkBearer, notes.create);
 
 server.listen((process.env.PORT || 8000), function() {
   console.log('%s listening at %s', server.name, server.url);
