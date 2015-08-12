@@ -27,10 +27,10 @@ module.exports = {
       ;
 
     query.exec(function(err, data) {
-        res.send({
-          posts: data,
-        });
+      res.send({
+        posts: data,
       });
+    });
   },
   show: function(req, res) {
     // TODO:
