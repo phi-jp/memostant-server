@@ -4,10 +4,11 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // スキーマの定義
 var scheme = new Schema({
-  _creator : { type: Schema.ObjectId, ref: 'User' },
+  _creator : { type: ObjectId, ref: 'User' },
   title: String,
   content: String,
   created:    { type: Date, default: Date.now },
@@ -21,15 +22,20 @@ var Note = mongoose.model('Note');
 
 module.exports = {
   index: function(req, res) {
+    var userId = req.params.userId;
+
     var query = Note
       .find({
-        // '_creator.name': 'phi',
+        _creator: userId,
+        // _creator: '55cc8a2e66b9c0eb72ed9d67',
+        // _creator: '55cb4fe5ec890fd2674e86a4',
       })
       .populate('_creator', 'name')
       ;
-
+    
     query.exec(function(err, data) {
       res.send({
+        err: err,
         notes: data,
       });
     });

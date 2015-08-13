@@ -12,9 +12,10 @@ var userSchema = new Schema({
   screen_name: String,
   admin: Boolean,
   description: String,
-  created:    { type: Date, default: Date.now },
-  updated:    { type: Date, default: Date.now },
+  created: { type: Date, default: Date.now },
+  updated: { type: Date, default: Date.now },
   
+  'auth0': String,
   'google-oauth2': String,
 });
 
