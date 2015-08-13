@@ -10,6 +10,8 @@ var scheme = new Schema({
   _creator : { type: Schema.ObjectId, ref: 'User' },
   title: String,
   content: String,
+  created:    { type: Date, default: Date.now },
+  updated:    { type: Date, default: Date.now },
 });
 
 // モデルを生成
@@ -63,6 +65,7 @@ module.exports = {
     }, function(err, note) {
       note.title = req.params.title;
       note.content = req.params.content;
+      note.updated = new Date();
 
       note.save(function(err, note) {
         res.json({
