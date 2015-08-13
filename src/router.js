@@ -17,7 +17,6 @@ function router(server) {
   server.post('/login', auth.login);
   server.get('/auth', auth.checkBearer, function(req, res) {
     var sub = req.user.sub;
-    console.log(sub);
     res.json({
       user: req.user,
     });
@@ -27,6 +26,7 @@ function router(server) {
   server.get('/users', users.index);
   server.get('/users/:name', users.show);
   server.post('/users', auth.checkBearer, users.create);
+  server.put('/users/:id', auth.checkBearer, users.update);
 
   // note
   server.get('/notes', notes.index);

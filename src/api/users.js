@@ -43,9 +43,12 @@ module.exports = {
   },
   create: function(req, res) {
     var user = new User({
-      name: req.params.name,
       admin: true,
     });
+
+    user.name = req.params.name;
+    user.description = req.params.description;
+
     var subs = req.user.split('|');
     user[subs[0]] = subs[1];
 
@@ -56,6 +59,15 @@ module.exports = {
     });
   },
   update: function(req, res) {
-    res.send("update");
+    var user = req.user;
+
+    user.name = req.params.name;
+    user.description = req.params.description;
+
+    user.save(function(err, data) {
+      res.send({
+        user: data,
+      });
+    });
   },
 };
