@@ -42,8 +42,12 @@ passport.use(new BearerStrategy({
 
 module.exports = {
   me: function(req, res) {
+    var user = null;
+    if (typeof req.user === 'object') {
+      user = req.user;
+    }
     res.json({
-      user: req.user,
+      user: user,
     });
   },
   login: function(req, res) {

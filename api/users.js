@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 // スキーマの定義
 var userSchema = new Schema({
 
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true, },
   screen_name: String,
   admin: Boolean,
   description: String,
