@@ -10,7 +10,7 @@ server.use(restify.bodyParser());
 server.use(restify.queryParser());
 // cross domain 対策
 // http://stackoverflow.com/questions/14338683/how-can-i-support-cors-when-using-restify
-server.use(restify.CORS());
+server.pre(restify.CORS());
 server.use(restify.fullResponse());
 
 // setup mongoose
