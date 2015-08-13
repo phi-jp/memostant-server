@@ -7,15 +7,15 @@ var Schema = mongoose.Schema;
 
 // スキーマの定義
 var userSchema = new Schema({
-  'google-oauth2': String,
 
-  score: Number,
   name: { type: String, required: true },
   screen_name: String,
   admin: Boolean,
   description: String,
-
-  notes : [{ type: Schema.ObjectId, ref: 'Note' }],
+  created:    { type: Date, default: Date.now },
+  updated:    { type: Date, default: Date.now },
+  
+  'google-oauth2': String,
 });
 
 // モデルを生成

@@ -71,4 +71,14 @@ module.exports = {
       });
     });
   },
+  destroy: function(req, res) {
+    Note.remove({_id: req.params.id}, function(err) {
+      if (err) {
+        res.json('error');
+      }
+      else {
+        res.json('success');
+      }
+    });
+  },
 };

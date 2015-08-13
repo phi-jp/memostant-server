@@ -41,6 +41,7 @@ server.get('/notes', notes.index);
 server.get('/notes/:id', notes.show);
 server.post('/notes', auth.checkBearer, notes.create);
 server.put('/notes/:id', auth.checkBearer, notes.update);
+server.del('/notes/:id', auth.checkBearer, notes.destroy);
 
 server.get('/auth', auth.checkBearer, function(req, res) {
   var sub = req.user.sub;
