@@ -28,7 +28,7 @@ server.get('/', function(req, res) {
     message: 'Hello, world!',
   });
 });
-server.post('/me', auth.checkBearer, auth.me);
+server.get('/me', auth.checkBearer, auth.me);
 server.post('/login', auth.login);
 
 server.get('/users', users.index);
