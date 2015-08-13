@@ -7,10 +7,11 @@ var Schema = mongoose.Schema;
 
 // スキーマの定義
 var userSchema = new Schema({
+  'google-oauth2': String,
+
   score: Number,
   name: { type: String, required: true },
   screen_name: String,
-  password: String, 
   admin: Boolean,
   description: String,
 
@@ -23,10 +24,6 @@ var User = mongoose.model('User');
 
 
 module.exports = {
-  setup: function(req, res) {
-
-  },
-
   index: function(req, res) {
     User.find({}, ['name', 'screen_name'].join(' '), function(err, data) {
       res.send({
@@ -46,12 +43,15 @@ module.exports = {
   create: function(req, res) {
     var user = new User({
       name: req.params.name,
-      password: req.params.password,
       admin: true,
     });
+    // auth key を登録
+    var subs = req.user.sub.split('|');
+    user[subs[0]] = subs[1];
+
     user.save(function(err, data) {
       res.send({
-        user: user,
+        user: data,
       });
     });
   },

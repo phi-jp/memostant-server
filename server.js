@@ -28,14 +28,23 @@ server.get('/', function(req, res) {
     message: 'Hello, world!',
   });
 });
+server.post('/me', auth.checkBearer, auth.me);
 server.post('/login', auth.login);
 
 server.get('/users', users.index);
 server.get('/users/:name', users.show);
-server.post('/users', users.create);
+server.post('/users', auth.checkBearer, users.create);
 
 server.get('/notes', notes.index);
 server.post('/notes', auth.checkBearer, notes.create);
+
+server.get('/auth', auth.checkBearer, function(req, res) {
+  var sub = req.user.sub;
+  console.log(sub);
+  res.json({
+    user: req.user,
+  });
+});
 
 server.listen((process.env.PORT || 8000), function() {
   console.log('%s listening at %s', server.name, server.url);
