@@ -45,8 +45,7 @@ module.exports = {
       name: req.params.name,
       admin: true,
     });
-    // auth key を登録
-    var subs = req.user.sub.split('|');
+    var subs = req.user.split('|');
     user[subs[0]] = subs[1];
 
     user.save(function(err, data) {

@@ -14,36 +14,36 @@ var mongoose = require('mongoose');
 passport.use(new BearerStrategy({
   },
   function(token, done) {
-
     var secret = new Buffer(config.secret, 'base64');
     jwt.verify(token, secret, { audience: 'OkDgBFuMfTt6iKz0fLQ1IAUm9zftz9TW' }, function(err, decoded) {
-      if (err) {
-        return done(err);
-      }
-      else if(decoded) {
-        return done(null, decoded);
-      }
-      else {
-        return done(null, false);
-      }
+      var sub = decoded.sub;
+      var subs = sub.split('|');
+      var q = {};
+      q[subs[0]] = subs[1];
+
+      var User = mongoose.model('User');
+      var query = User.findOne(q);
+
+      query.exec(function(err, user) {
+        if (err) {
+          return done(err);
+        }
+        else if(user) {
+          return done(null, user);
+        }
+        else {
+          return done(null, sub);
+        }
+      });
+
     });
   }
 ));
 
 module.exports = {
   me: function(req, res) {
-    var sub = req.user.sub;
-    var subs = sub.split('|');
-    var select = {};
-    select[subs[0]] = subs[1];
-
-    var User = mongoose.model('User');
-    var query = User.findOne(select);
-
-    query.exec(function(err, user) {
-      res.json({
-        user: user,
-      });
+    res.json({
+      user: req.user,
     });
   },
   login: function(req, res) {

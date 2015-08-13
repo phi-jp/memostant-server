@@ -28,12 +28,18 @@ module.exports = {
 
     query.exec(function(err, data) {
       res.send({
-        posts: data,
+        notes: data,
       });
     });
   },
   show: function(req, res) {
-    // TODO:
+    Note.findOne({
+      _id: req.params.id,
+    }, function(err, data) {
+      res.json({
+        note: data,
+      });
+    });
   },
   create: function(req, res) {
     var note = new Note({
@@ -52,6 +58,17 @@ module.exports = {
   update: function(req, res) {
     var user = req.user;
 
-    res.send("update");
+    Note.findOne({
+      _id: req.params.id,
+    }, function(err, note) {
+      note.title = req.params.title;
+      note.content = req.params.content;
+
+      note.save(function(err, note) {
+        res.json({
+          note: note,
+        });
+      });
+    });
   },
 };

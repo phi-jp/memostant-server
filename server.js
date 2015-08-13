@@ -6,10 +6,12 @@ var restify = require('restify');
 var server = restify.createServer();
 
 // setup server
+server.use(restify.authorizationParser());
 server.use(restify.bodyParser());
 server.use(restify.queryParser());
 // cross domain 対策
 // http://stackoverflow.com/questions/14338683/how-can-i-support-cors-when-using-restify
+restify.CORS.ALLOW_HEADERS.push('authorization');
 server.pre(restify.CORS());
 server.use(restify.fullResponse());
 
@@ -36,7 +38,9 @@ server.get('/users/:name', users.show);
 server.post('/users', auth.checkBearer, users.create);
 
 server.get('/notes', notes.index);
+server.get('/notes/:id', notes.show);
 server.post('/notes', auth.checkBearer, notes.create);
+server.put('/notes/:id', auth.checkBearer, notes.update);
 
 server.get('/auth', auth.checkBearer, function(req, res) {
   var sub = req.user.sub;
